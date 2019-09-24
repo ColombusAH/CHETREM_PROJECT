@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Chetrem.Api.Data;
+using Chetrem.Api.Dtos;
 using Chetrem.Api.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,12 +18,12 @@ namespace Chetrem.Api.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(string username, string password)
+        public async Task<IActionResult> Register(UserForRegisterDto userForRegisterDto)
         {
             //TODO: validate the request
-            username = username.ToLower();
+            userForRegisterDto.Username = userForRegisterDto.Username.ToLower();
 
-            if (await _repo.UserExist(username))
+            if (await _repo.UserExist(userForRegisterDto.Username))
             {
                 return BadRequest("User already exist");
             }
@@ -30,10 +31,10 @@ namespace Chetrem.Api.Controllers
             var userToCreate = new User
             {
 
-                Username = username
+                Username = userForRegisterDto.Username
             };
 
-            var createdUser = _repo.Register(userToCreate, password);
+            var createdUser = _repo.Register(userToCreate, userForRegisterDto.Password);
             return StatusCode(201, createdUser);
 
 

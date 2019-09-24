@@ -52,6 +52,7 @@ namespace Chetrem.Api.Data
             byte[] passwordHash, passwordSalt;
             CreatePasswordHash(password, out passwordHash, out passwordSalt);
             user.PasswordHash = passwordHash;
+            user.PasswordSalt = passwordSalt;
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
             return user;
